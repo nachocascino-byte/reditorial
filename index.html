@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Rentabilidad | Reditorial.es</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div id="calculadora-container">
+        <header>
+            <h1>Calculadora de Rentabilidad</h1>
+            <p>Co-Creación (Reditorial) vs. Alquiler de Contenido</p>
+        </header>
+
+        <main>
+            <section id="inputs-section">
+                <h2>Introduce los datos de tu proyecto</h2>
+                <div class="input-group">
+                    <label for="horas">Horas de Formación del Curso</label>
+                    <input type="number" id="horas" value="60">
+                </div>
+                <div class="input-group">
+                    <label for="ventasAnuales">Ventas Anuales Estimadas (Unidades)</label>
+                    <input type="number" id="ventasAnuales" value="50">
+                </div>
+                <div class="input-group">
+                    <label for="costeAlquiler">Coste Actual por Licencia (€)</label>
+                    <input type="number" id="costeAlquiler" value="24">
+                </div>
+                <div class="input-group">
+                    <label for="precioVenta">Precio de Venta de tu Curso (€)</label>
+                    <input type="number" id="precioVenta" value="120">
+                </div>
+            </section>
+
+            <section id="results-section">
+                <h2>Resultados: El Veredicto</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Métrica Clave</th>
+                            <th>Modelo Alquiler</th>
+                            <th>Modelo Co-creación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Inversión Inicial</td>
+                            <td>0 €</td>
+                            <td id="resultado-inversion" class="positivo"></td>
+                        </tr>
+                        <tr>
+                            <td>Payback (en Meses)</td>
+                            <td>No Aplica</td>
+                            <td id="resultado-payback" class="positivo"></td>
+                        </tr>
+                        <tr>
+                            <td>Coste Total a 3 Años</td>
+                            <td id="resultado-coste-alquiler" class="negativo"></td>
+                            <td id="resultado-coste-cocreacion" class="positivo"></td>
+                        </tr>
+                         <tr>
+                            <td>Beneficio Neto Total (3 años)</td>
+                            <td id="resultado-beneficio-alquiler"></td>
+                            <td id="resultado-beneficio-cocreacion" class="positivo"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ahorro Neto (Beneficio Adicional)</strong></td>
+                            <td>0 €</td>
+                            <td id="resultado-ahorro" class="positivo-fuerte"></td>
+                        </tr>
+                        <tr>
+                            <td>ROI (Retorno sobre Inversión)</td>
+                            <td>No Aplica</td>
+                            <td id="resultado-roi" class="positivo"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+        
+       ...
+    <footer>
+        <p id="conclusion"></p>
+    </footer>
+
+    <section id="grafico-section">
+        <h2>Comparativa Visual</h2>
+        <div class="chart-container">
+            <canvas id="miGrafico"></canvas>
+        </div>
+    </section>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
