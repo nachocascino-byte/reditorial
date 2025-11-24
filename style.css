@@ -8,9 +8,9 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 20px;
+    margin: 0;
 }
 
-/* Contenedor Principal de la Calculadora */
 #calculadora-container {
     background-color: #ffffff;
     border-radius: 12px;
@@ -47,9 +47,9 @@ h2 {
 /* Sección de Entradas */
 #inputs-section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .input-group label {
@@ -59,7 +59,7 @@ h2 {
     font-size: 0.9em;
 }
 
-.input-group input {
+.input-group input, .input-group select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -68,11 +68,52 @@ h2 {
     box-sizing: border-box;
 }
 
-/* Sección de Resultados */
+/* Destacar el input nuevo */
+.highlight-input label {
+    color: #e65100; /* Un color naranja sutil para destacar */
+}
+.highlight-input select {
+    border-color: #ffe0b2;
+    background-color: #fff8e1;
+}
+
+/* Sección de Detalles de Producción (NUEVO) */
+.production-details {
+    display: flex;
+    justify-content: space-between;
+    background-color: #e8eaf6;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.detail-box {
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+}
+
+.detail-box .label {
+    display: block;
+    font-size: 0.85em;
+    color: #5c6bc0;
+    margin-bottom: 5px;
+}
+
+.detail-box .value {
+    display: block;
+    font-weight: 600;
+    font-size: 1.1em;
+    color: #1a237e;
+}
+
+/* Tabla Resultados */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 th, td {
@@ -86,15 +127,11 @@ th {
     font-weight: 600;
 }
 
-tbody tr:last-child td {
-    border-bottom: none;
-}
-
 .negativo { color: #d32f2f; }
 .positivo { color: #388e3c; }
 .positivo-fuerte { color: #388e3c; font-weight: 600; font-size: 1.1em; }
 
-/* Conclusión */
+/* Conclusión y Gráfico */
 footer {
     background-color: #e8eaf6;
     border-radius: 8px;
@@ -104,7 +141,8 @@ footer {
     font-size: 1.1em;
     font-weight: 600;
     color: #1a237e;
-} /* Sección del Gráfico */
+}
+
 #grafico-section {
     margin-top: 40px;
     border-top: 1px solid #e0e0e0;
@@ -113,6 +151,6 @@ footer {
 
 .chart-container {
     position: relative;
-    height: 400px; /* Puedes ajustar la altura del gráfico aquí */
+    height: 350px;
     width: 100%;
 }
