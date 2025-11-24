@@ -2,11 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ELEMENTOS DE ENTRADA (INPUTS) ---
     const inputHoras = document.getElementById('horas');
+    const inputRatio = document.getElementById('ratioPaginas'); // NUEVO SELECTOR
     const inputVentasAnuales = document.getElementById('ventasAnuales');
     const inputCosteAlquiler = document.getElementById('costeAlquiler');
     const inputPrecioVenta = document.getElementById('precioVenta');
 
     // --- ELEMENTOS DE SALIDA (OUTPUTS) ---
+    const outPaginasTotales = document.getElementById('output-paginas-totales');
+    const outPrecioPagina = document.getElementById('output-precio-pagina');
+    const outPrecioHora = document.getElementById('output-precio-hora');
+
     const resultadoInversion = document.getElementById('resultado-inversion');
     const resultadoPayback = document.getElementById('resultado-payback');
     const resultadoCosteAlquiler = document.getElementById('resultado-coste-alquiler');
@@ -17,31 +22,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultadoROI = document.getElementById('resultado-roi');
     const conclusion = document.getElementById('conclusion');
 
-    // --- PARÁMETROS INTERNOS ---
-    const PRECIO_BASE_PAGINA = 3;
-    const RELACION_PAGINAS_HORA = 2;
-    const RECARGO_EXPERTO = 0.50; // 50%
+    // --- PARÁMETROS FIJOS ---
     const HORIZONTE_AÑOS = 3;
-    const PRECIO_EFECTIVO_PAGINA = PRECIO_BASE_PAGINA * (1 + RECARGO_EXPERTO);
 
     // --- INICIALIZACIÓN DEL GRÁFICO ---
     const ctx = document.getElementById('miGrafico').getContext('2d');
     let miGrafico = new Chart(ctx, {
-        type: 'bar', // Tipo de gráfico: barras
+        type: 'bar',
         data: {
             labels: ['Coste Total (3 Años)', 'Beneficio Neto (3 Años)'],
             datasets: [
                 {
                     label: 'Modelo Alquiler',
-                    data: [0, 0], // Datos iniciales
-                    backgroundColor: 'rgba(211, 47, 47, 0.7)', // Rojo
+                    data: [0, 0],
+                    backgroundColor: 'rgba(211, 47, 47, 0.7)',
                     borderColor: 'rgba(211, 47, 47, 1)',
                     borderWidth: 1
                 },
                 {
                     label: 'Modelo Co-creación',
-                    data: [0, 0], // Datos iniciales
-                    backgroundColor: 'rgba(56, 142, 60, 0.7)', // Verde
+                    data: [0, 0],
+                    backgroundColor: 'rgba(56, 142, 60, 0.7)',
                     borderColor: 'rgba(56, 142, 60, 1)',
                     borderWidth: 1
                 }
@@ -66,24 +67,37 @@ document.addEventListener('DOMContentLoaded', () => {
     function calcular() {
         // 1. Obtener valores de los inputs
         const horas = parseFloat(inputHoras.value) || 0;
+        const ratioPaginas = parseFloat(inputRatio.value) || 4; // Default a 4 si falla
         const ventasAnuales = parseFloat(inputVentasAnuales.value) || 0;
         const costeAlquiler = parseFloat(inputCosteAlquiler.value) || 0;
         const precioVenta = parseFloat(inputPrecioVenta.value) || 0;
 
-        // 2. Cálculos intermedios
-        const paginas = horas * RELACION_PAGINAS_HORA;
+        // 2. Definir Precio por Página según Tiers (Volumen en Horas)
+        // Tier 1: < 500 horas -> 6€
+        // Tier 2: 500 - 5000 horas -> 5.5€
+        // Tier 3: > 5000 horas -> 5€
         
-        let descuento = 0;
-        if (paginas >= 100000) descuento = 0.30;
-        else if (paginas >= 25000) descuento = 0.20;
-        else if (paginas >= 10000) descuento = 0.10;
-        
-        // 3. Cálculos de resultados
-        const inversionInicial = paginas * PRECIO_EFECTIVO_PAGINA * (1 - descuento);
+        let precioPorPagina = 6; // Precio Base (Tier 1)
+
+        if (horas > 5000) {
+            precioPorPagina = 5; // Tier 3
+        } else if (horas >= 500) {
+            precioPorPagina = 5.5; // Tier 2
+        } else {
+            precioPorPagina = 6; // Tier 1
+        }
+
+        // 3. Cálculos de Producción
+        const paginasTotales = horas * ratioPaginas;
+        const inversionInicial = paginasTotales * precioPorPagina;
+        const costoProduccionPorHora = precioPorPagina * ratioPaginas;
+
+        // 4. Cálculos Financieros (Comparativa)
         const paybackMeses = (costeAlquiler > 0 && ventasAnuales > 0) ? (inversionInicial / (costeAlquiler * ventasAnuales) * 12) : 0;
         
         const costeTotalAlquiler3Anos = ventasAnuales * HORIZONTE_AÑOS * costeAlquiler;
-        const costeTotalCoCreacion = inversionInicial;
+        // En modelo Co-creación el coste es solo la inversión inicial (asumiendo mantenimiento 0 o incluido en margen)
+        const costeTotalCoCreacion = inversionInicial; 
 
         const ingresosTotales3Anos = ventasAnuales * HORIZONTE_AÑOS * precioVenta;
         const beneficioNetoAlquiler = ingresosTotales3Anos - costeTotalAlquiler3Anos;
@@ -92,35 +106,42 @@ document.addEventListener('DOMContentLoaded', () => {
         const ahorroNeto = costeTotalAlquiler3Anos - costeTotalCoCreacion;
         const roi = (inversionInicial > 0) ? (ahorroNeto / inversionInicial) * 100 : 0;
 
-        // 4. Actualizar la interfaz (DOM)
+        // 5. Actualizar la interfaz (DOM)
         const formatCurrency = (value) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(value);
 
+        // Nuevos Outputs Superiores
+        outPaginasTotales.textContent = new Intl.NumberFormat('es-ES').format(paginasTotales);
+        outPrecioPagina.textContent = formatCurrency(precioPorPagina);
+        outPrecioHora.textContent = formatCurrency(costoProduccionPorHora);
+
+        // Tabla de Resultados
         resultadoInversion.textContent = formatCurrency(inversionInicial);
-        resultadoPayback.textContent = `${paybackMeses.toFixed(0)} meses`;
+        resultadoPayback.textContent = `${paybackMeses.toFixed(1)} meses`;
         resultadoCosteAlquiler.textContent = formatCurrency(costeTotalAlquiler3Anos);
         resultadoCosteCoCreacion.textContent = formatCurrency(costeTotalCoCreacion);
         resultadoBeneficioAlquiler.textContent = formatCurrency(beneficioNetoAlquiler);
         resultadoBeneficioCoCreacion.textContent = formatCurrency(beneficioNetoCoCreacion);
         resultadoAhorro.textContent = formatCurrency(ahorroNeto);
-        resultadoROI.textContent = `${roi.toFixed(1)}%`;
+        resultadoROI.textContent = `${roi.toFixed(0)}%`;
         
-        conclusion.textContent = `Invirtiendo ${formatCurrency(inversionInicial)} en tu propio curso, recuperas la inversión en ${Math.ceil(paybackMeses)} meses y generas un beneficio adicional de ${formatCurrency(ahorroNeto)} en 3 años.`;
+        // Conclusión Dinámica
+        conclusion.textContent = `Invirtiendo ${formatCurrency(inversionInicial)} (a ${formatCurrency(costoProduccionPorHora)}/hora producida), recuperas la inversión en ${Math.ceil(paybackMeses)} meses y generas un beneficio adicional de ${formatCurrency(ahorroNeto)} en 3 años.`;
 
-        // 5. Actualizar el gráfico
+        // 6. Actualizar el gráfico
         actualizarGrafico(costeTotalAlquiler3Anos, costeTotalCoCreacion, beneficioNetoAlquiler, beneficioNetoCoCreacion);
     }
 
     function actualizarGrafico(costeAlquiler, costeCoCreacion, beneficioAlquiler, beneficioCoCreacion) {
-        miGrafico.data.datasets[0].data = [costeAlquiler, beneficioAlquiler]; // Datos del Modelo Alquiler
-        miGrafico.data.datasets[1].data = [costeCoCreacion, beneficioCoCreacion]; // Datos del Modelo Co-creación
-        miGrafico.update(); // Redibuja el gráfico con los nuevos datos
+        miGrafico.data.datasets[0].data = [costeAlquiler, beneficioAlquiler]; 
+        miGrafico.data.datasets[1].data = [costeCoCreacion, beneficioCoCreacion]; 
+        miGrafico.update(); 
     }
 
     // --- EVENTOS ---
-    [inputHoras, inputVentasAnuales, inputCosteAlquiler, inputPrecioVenta].forEach(input => {
+    [inputHoras, inputRatio, inputVentasAnuales, inputCosteAlquiler, inputPrecioVenta].forEach(input => {
         input.addEventListener('input', calcular);
     });
 
-    // Calcular al cargar la página por primera vez
+    // Calcular al cargar
     calcular();
 });
