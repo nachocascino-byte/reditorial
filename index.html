@@ -21,18 +21,37 @@
         <main>
             <section id="inputs-section">
                 <h2>Introduce los datos de tu proyecto</h2>
+                
                 <div class="input-group">
                     <label for="horas">Horas de Formación del Curso</label>
-                    <input type="number" id="horas" value="60">
+                    <input type="number" id="horas" value="60" min="1">
                 </div>
+
+                <div class="input-group highlight-input">
+                    <label for="ratioPaginas">Páginas por Hora (Densidad)</label>
+                    <select id="ratioPaginas">
+                        <option value="2">2 págs/hora (Muy Ligero)</option>
+                        <option value="3">3 págs/hora (Ligero)</option>
+                        <option value="4" selected>4 págs/hora (Estándar)</option>
+                        <option value="5">5 págs/hora (Denso)</option>
+                        <option value="6">6 págs/hora (Muy Denso)</option>
+                        <option value="7">7 págs/hora</option>
+                        <option value="8">8 págs/hora</option>
+                        <option value="9">9 págs/hora</option>
+                        <option value="10">10 págs/hora</option>
+                    </select>
+                </div>
+
                 <div class="input-group">
                     <label for="ventasAnuales">Ventas Anuales Estimadas (Unidades)</label>
                     <input type="number" id="ventasAnuales" value="50">
                 </div>
+                
                 <div class="input-group">
                     <label for="costeAlquiler">Coste Actual por Licencia (€)</label>
                     <input type="number" id="costeAlquiler" value="24">
                 </div>
+                
                 <div class="input-group">
                     <label for="precioVenta">Precio de Venta de tu Curso (€)</label>
                     <input type="number" id="precioVenta" value="120">
@@ -41,6 +60,22 @@
 
             <section id="results-section">
                 <h2>Resultados: El Veredicto</h2>
+                
+                <div class="production-details">
+                    <div class="detail-box">
+                        <span class="label">Páginas Totales:</span>
+                        <span id="output-paginas-totales" class="value">0</span>
+                    </div>
+                    <div class="detail-box">
+                        <span class="label">Tu Precio por Página:</span>
+                        <span id="output-precio-pagina" class="value">0 €</span>
+                    </div>
+                    <div class="detail-box">
+                        <span class="label">Tu Costo Producción / Hora:</span>
+                        <span id="output-precio-hora" class="value">0 €</span>
+                    </div>
+                </div>
+
                 <table>
                     <thead>
                         <tr>
@@ -85,20 +120,18 @@
             </section>
         </main>
         
-       ...
-    <footer>
-        <p id="conclusion"></p>
-    </footer>
+        <footer>
+            <p id="conclusion"></p>
+        </footer>
 
-    <section id="grafico-section">
-        <h2>Comparativa Visual</h2>
-        <div class="chart-container">
-            <canvas id="miGrafico"></canvas>
-        </div>
-    </section>
-</div>
+        <section id="grafico-section">
+            <h2>Comparativa Visual</h2>
+            <div class="chart-container">
+                <canvas id="miGrafico"></canvas>
+            </div>
+        </section>
+    </div>
 
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
