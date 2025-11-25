@@ -22,14 +22,30 @@ body {
 header {
     background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
     color: white;
-    padding: 30px;
+    padding: 20px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 20px; /* Espacio entre logo y el badge del Tier */
 }
 
-header h1 { margin: 0; font-size: 1.8rem; }
-header p { margin: 5px 0 0 0; opacity: 0.8; font-weight: 400; }
+.brand-container {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espacio entre la imagen y el texto */
+}
+
+.header-logo {
+    height: 60px; /* Altura del logo, ajústalo si lo ves muy grande o pequeño */
+    width: auto;
+    background-color: white; /* Fondo blanco por si tu logo es oscuro/transparente */
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.header-text h1 { margin: 0; font-size: 1.6rem; line-height: 1.2; }
+.header-text p { margin: 2px 0 0 0; opacity: 0.9; font-weight: 400; font-size: 0.9rem; }
 
 /* TIER BADGE */
 .tier-badge {
